@@ -1,0 +1,781 @@
+
+SPI.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         00000326  00000000  00000000  00000074  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000000  00800060  00800060  0000039a  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .bss          00000003  00800060  00800060  0000039a  2**0
+                  ALLOC
+  3 .comment      00000030  00000000  00000000  0000039a  2**0
+                  CONTENTS, READONLY
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000003cc  2**2
+                  CONTENTS, READONLY
+  5 .debug_aranges 000000b0  00000000  00000000  00000408  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_info   00000c2f  00000000  00000000  000004b8  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_abbrev 0000077f  00000000  00000000  000010e7  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_line   000008f9  00000000  00000000  00001866  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_frame  00000128  00000000  00000000  00002160  2**2
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_str    000004eb  00000000  00000000  00002288  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_loc    00000bb2  00000000  00000000  00002773  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 12 .debug_ranges 00000080  00000000  00000000  00003325  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 2a 00 	jmp	0x54	; 0x54 <__ctors_end>
+   4:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+   8:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+   c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  10:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  14:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  18:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  1c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  20:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  24:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  28:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  2c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  30:	0c 94 c9 00 	jmp	0x192	; 0x192 <__vector_12>
+  34:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  38:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  3c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  40:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  44:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  48:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  4c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  50:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+
+00000054 <__ctors_end>:
+  54:	11 24       	eor	r1, r1
+  56:	1f be       	out	0x3f, r1	; 63
+  58:	cf e5       	ldi	r28, 0x5F	; 95
+  5a:	d8 e0       	ldi	r29, 0x08	; 8
+  5c:	de bf       	out	0x3e, r29	; 62
+  5e:	cd bf       	out	0x3d, r28	; 61
+
+00000060 <__do_clear_bss>:
+  60:	20 e0       	ldi	r18, 0x00	; 0
+  62:	a0 e6       	ldi	r26, 0x60	; 96
+  64:	b0 e0       	ldi	r27, 0x00	; 0
+  66:	01 c0       	rjmp	.+2      	; 0x6a <.do_clear_bss_start>
+
+00000068 <.do_clear_bss_loop>:
+  68:	1d 92       	st	X+, r1
+
+0000006a <.do_clear_bss_start>:
+  6a:	a3 36       	cpi	r26, 0x63	; 99
+  6c:	b2 07       	cpc	r27, r18
+  6e:	e1 f7       	brne	.-8      	; 0x68 <.do_clear_bss_loop>
+  70:	0e 94 3e 00 	call	0x7c	; 0x7c <main>
+  74:	0c 94 91 01 	jmp	0x322	; 0x322 <_exit>
+
+00000078 <__bad_interrupt>:
+  78:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+0000007c <main>:
+#include "SPI.h"
+
+#define DATA_CHARACTER 10
+
+int main(void)
+{
+  7c:	cf 93       	push	r28
+  7e:	df 93       	push	r29
+  80:	00 d0       	rcall	.+0      	; 0x82 <main+0x6>
+  82:	00 d0       	rcall	.+0      	; 0x84 <main+0x8>
+  84:	1f 92       	push	r1
+  86:	cd b7       	in	r28, 0x3d	; 61
+  88:	de b7       	in	r29, 0x3e	; 62
+    /* Replace with your application code */
+	Str_SpiCfg_t Str_cfg;
+	Str_cfg.Prescaller = (uint8_t)PSC_64;
+  8a:	82 e0       	ldi	r24, 0x02	; 2
+  8c:	89 83       	std	Y+1, r24	; 0x01
+	Str_cfg.Speed_Mode = (uint8_t)SINGLE_SPEED;
+  8e:	1a 82       	std	Y+2, r1	; 0x02
+	Str_cfg.Interrupt_Mode=POLLING;
+  90:	1b 82       	std	Y+3, r1	; 0x03
+	Str_cfg.Master_Mode=MASTER;
+  92:	1c 82       	std	Y+4, r1	; 0x04
+	Str_cfg.Order=LEASTFIRST;
+  94:	1d 82       	std	Y+5, r1	; 0x05
+    	SPI_Init(&Str_cfg);
+  96:	ce 01       	movw	r24, r28
+  98:	01 96       	adiw	r24, 0x01	; 1
+  9a:	0e 94 cd 00 	call	0x19a	; 0x19a <SPI_Init>
+	uint8_t Data= DATA_CHARACTER;
+  9e:	1a e0       	ldi	r17, 0x0A	; 10
+	while (1)
+	{
+		SPI_Sendbyte(Data);
+  a0:	81 2f       	mov	r24, r17
+  a2:	0e 94 7a 01 	call	0x2f4	; 0x2f4 <SPI_Sendbyte>
+		Data++;
+  a6:	1f 5f       	subi	r17, 0xFF	; 255
+  a8:	fb cf       	rjmp	.-10     	; 0xa0 <main+0x24>
+
+000000aa <DIO_u8Init_PIN>:
+ * */
+extern uint8_t DIO_u8Init_PIN(uint8_t Copy_u8PinN,uint8_t Copy_u8Dir)
+{
+	uint8_t Local_u8Error=NO_ERROR;              /*Local Error State*/
+
+	if(Copy_u8PinN > MAX_PIN_NO)     /*Check if Entered PIN NO. is more Than 7*/
+  aa:	80 32       	cpi	r24, 0x20	; 32
+  ac:	08 f0       	brcs	.+2      	; 0xb0 <DIO_u8Init_PIN+0x6>
+  ae:	6b c0       	rjmp	.+214    	; 0x186 <DIO_u8Init_PIN+0xdc>
+	{
+		Local_u8Error=ERROR;            /*Return ERROR*/
+	}
+	else if(Copy_u8Dir != DIO_INPUT && Copy_u8Dir != DIO_OUTPUT) /*Check if entered PIN Direction is not INPUT or OUTPUT*/
+  b0:	62 30       	cpi	r22, 0x02	; 2
+  b2:	08 f0       	brcs	.+2      	; 0xb6 <DIO_u8Init_PIN+0xc>
+  b4:	6a c0       	rjmp	.+212    	; 0x18a <DIO_u8Init_PIN+0xe0>
+	{
+		Local_u8Error=ERROR;           /*Return ERROR*/
+	}
+	else                          /*Entered PIN NO is not more than 7 and Direction is INPUT or OUTPUT*/
+	{
+		if(Copy_u8PinN>=0 && Copy_u8PinN<PIN_PER_PORT)
+  b6:	88 30       	cpi	r24, 0x08	; 8
+  b8:	a8 f4       	brcc	.+42     	; 0xe4 <DIO_u8Init_PIN+0x3a>
+		{		/*InCase PORTA*/
+			ASSIGN_BIT(DIRECTION_PORT0,Copy_u8PinN,Copy_u8Dir);  /*ASSIGN PIN NO to entered Direction*/
+  ba:	9a b3       	in	r25, 0x1a	; 26
+  bc:	21 e0       	ldi	r18, 0x01	; 1
+  be:	30 e0       	ldi	r19, 0x00	; 0
+  c0:	08 2e       	mov	r0, r24
+  c2:	02 c0       	rjmp	.+4      	; 0xc8 <DIO_u8Init_PIN+0x1e>
+  c4:	22 0f       	add	r18, r18
+  c6:	33 1f       	adc	r19, r19
+  c8:	0a 94       	dec	r0
+  ca:	e2 f7       	brpl	.-8      	; 0xc4 <DIO_u8Init_PIN+0x1a>
+  cc:	20 95       	com	r18
+  ce:	29 23       	and	r18, r25
+  d0:	70 e0       	ldi	r23, 0x00	; 0
+  d2:	02 c0       	rjmp	.+4      	; 0xd8 <DIO_u8Init_PIN+0x2e>
+  d4:	66 0f       	add	r22, r22
+  d6:	77 1f       	adc	r23, r23
+  d8:	8a 95       	dec	r24
+  da:	e2 f7       	brpl	.-8      	; 0xd4 <DIO_u8Init_PIN+0x2a>
+  dc:	62 2b       	or	r22, r18
+  de:	6a bb       	out	0x1a, r22	; 26
+ * Input     :Copy_u8PinNB (PIN Number) ,  Copy_u8Dir (PIN Direction)
+ * Output    : Return Error Status (Error or NO Error)
+ * */
+extern uint8_t DIO_u8Init_PIN(uint8_t Copy_u8PinN,uint8_t Copy_u8Dir)
+{
+	uint8_t Local_u8Error=NO_ERROR;              /*Local Error State*/
+  e0:	80 e0       	ldi	r24, 0x00	; 0
+  e2:	08 95       	ret
+	{
+		if(Copy_u8PinN>=0 && Copy_u8PinN<PIN_PER_PORT)
+		{		/*InCase PORTA*/
+			ASSIGN_BIT(DIRECTION_PORT0,Copy_u8PinN,Copy_u8Dir);  /*ASSIGN PIN NO to entered Direction*/
+		}
+		else if(Copy_u8PinN>=PIN_PER_PORT && Copy_u8PinN<(DIO_PORT_1+1)*PIN_PER_PORT)
+  e4:	98 ef       	ldi	r25, 0xF8	; 248
+  e6:	98 0f       	add	r25, r24
+  e8:	98 30       	cpi	r25, 0x08	; 8
+  ea:	b8 f4       	brcc	.+46     	; 0x11a <DIO_u8Init_PIN+0x70>
+		{
+			                                /*InCase PORTB*/
+				ASSIGN_BIT(DIRECTION_PORT1,(Copy_u8PinN-PIN_PER_PORT),Copy_u8Dir);      /*ASSIGN PIN NO to entered Direction*/
+  ec:	47 b3       	in	r20, 0x17	; 23
+  ee:	90 e0       	ldi	r25, 0x00	; 0
+  f0:	08 97       	sbiw	r24, 0x08	; 8
+  f2:	21 e0       	ldi	r18, 0x01	; 1
+  f4:	30 e0       	ldi	r19, 0x00	; 0
+  f6:	08 2e       	mov	r0, r24
+  f8:	02 c0       	rjmp	.+4      	; 0xfe <DIO_u8Init_PIN+0x54>
+  fa:	22 0f       	add	r18, r18
+  fc:	33 1f       	adc	r19, r19
+  fe:	0a 94       	dec	r0
+ 100:	e2 f7       	brpl	.-8      	; 0xfa <DIO_u8Init_PIN+0x50>
+ 102:	20 95       	com	r18
+ 104:	24 23       	and	r18, r20
+ 106:	70 e0       	ldi	r23, 0x00	; 0
+ 108:	02 c0       	rjmp	.+4      	; 0x10e <DIO_u8Init_PIN+0x64>
+ 10a:	66 0f       	add	r22, r22
+ 10c:	77 1f       	adc	r23, r23
+ 10e:	8a 95       	dec	r24
+ 110:	e2 f7       	brpl	.-8      	; 0x10a <DIO_u8Init_PIN+0x60>
+ 112:	62 2b       	or	r22, r18
+ 114:	67 bb       	out	0x17, r22	; 23
+ * Input     :Copy_u8PinNB (PIN Number) ,  Copy_u8Dir (PIN Direction)
+ * Output    : Return Error Status (Error or NO Error)
+ * */
+extern uint8_t DIO_u8Init_PIN(uint8_t Copy_u8PinN,uint8_t Copy_u8Dir)
+{
+	uint8_t Local_u8Error=NO_ERROR;              /*Local Error State*/
+ 116:	80 e0       	ldi	r24, 0x00	; 0
+ 118:	08 95       	ret
+		else if(Copy_u8PinN>=PIN_PER_PORT && Copy_u8PinN<(DIO_PORT_1+1)*PIN_PER_PORT)
+		{
+			                                /*InCase PORTB*/
+				ASSIGN_BIT(DIRECTION_PORT1,(Copy_u8PinN-PIN_PER_PORT),Copy_u8Dir);      /*ASSIGN PIN NO to entered Direction*/
+		}
+		else if(Copy_u8PinN>=2*PIN_PER_PORT && Copy_u8PinN<(DIO_PORT_2+1)*PIN_PER_PORT)
+ 11a:	90 ef       	ldi	r25, 0xF0	; 240
+ 11c:	98 0f       	add	r25, r24
+ 11e:	98 30       	cpi	r25, 0x08	; 8
+ 120:	b8 f4       	brcc	.+46     	; 0x150 <DIO_u8Init_PIN+0xa6>
+		{
+			                               /*InCase PORTC*/
+				ASSIGN_BIT(DIRECTION_PORT2,(Copy_u8PinN-(2*PIN_PER_PORT)),Copy_u8Dir);      /*ASSIGN PIN NO to entered Direction*/
+ 122:	44 b3       	in	r20, 0x14	; 20
+ 124:	90 e0       	ldi	r25, 0x00	; 0
+ 126:	40 97       	sbiw	r24, 0x10	; 16
+ 128:	21 e0       	ldi	r18, 0x01	; 1
+ 12a:	30 e0       	ldi	r19, 0x00	; 0
+ 12c:	08 2e       	mov	r0, r24
+ 12e:	02 c0       	rjmp	.+4      	; 0x134 <DIO_u8Init_PIN+0x8a>
+ 130:	22 0f       	add	r18, r18
+ 132:	33 1f       	adc	r19, r19
+ 134:	0a 94       	dec	r0
+ 136:	e2 f7       	brpl	.-8      	; 0x130 <DIO_u8Init_PIN+0x86>
+ 138:	20 95       	com	r18
+ 13a:	24 23       	and	r18, r20
+ 13c:	70 e0       	ldi	r23, 0x00	; 0
+ 13e:	02 c0       	rjmp	.+4      	; 0x144 <DIO_u8Init_PIN+0x9a>
+ 140:	66 0f       	add	r22, r22
+ 142:	77 1f       	adc	r23, r23
+ 144:	8a 95       	dec	r24
+ 146:	e2 f7       	brpl	.-8      	; 0x140 <DIO_u8Init_PIN+0x96>
+ 148:	62 2b       	or	r22, r18
+ 14a:	64 bb       	out	0x14, r22	; 20
+ * Input     :Copy_u8PinNB (PIN Number) ,  Copy_u8Dir (PIN Direction)
+ * Output    : Return Error Status (Error or NO Error)
+ * */
+extern uint8_t DIO_u8Init_PIN(uint8_t Copy_u8PinN,uint8_t Copy_u8Dir)
+{
+	uint8_t Local_u8Error=NO_ERROR;              /*Local Error State*/
+ 14c:	80 e0       	ldi	r24, 0x00	; 0
+ 14e:	08 95       	ret
+		else if(Copy_u8PinN>=2*PIN_PER_PORT && Copy_u8PinN<(DIO_PORT_2+1)*PIN_PER_PORT)
+		{
+			                               /*InCase PORTC*/
+				ASSIGN_BIT(DIRECTION_PORT2,(Copy_u8PinN-(2*PIN_PER_PORT)),Copy_u8Dir);      /*ASSIGN PIN NO to entered Direction*/
+		}
+		else if(Copy_u8PinN>=3*PIN_PER_PORT && Copy_u8PinN<(DIO_PORT_3+1)*PIN_PER_PORT)
+ 150:	98 ee       	ldi	r25, 0xE8	; 232
+ 152:	98 0f       	add	r25, r24
+ 154:	98 30       	cpi	r25, 0x08	; 8
+ 156:	d8 f4       	brcc	.+54     	; 0x18e <DIO_u8Init_PIN+0xe4>
+		{
+			                               /*InCase PORTD*/
+				ASSIGN_BIT(DIRECTION_PORT3,(Copy_u8PinN-(3*PIN_PER_PORT)),Copy_u8Dir);      /*ASSIGN PIN NO to entered Direction*/
+ 158:	41 b3       	in	r20, 0x11	; 17
+ 15a:	90 e0       	ldi	r25, 0x00	; 0
+ 15c:	48 97       	sbiw	r24, 0x18	; 24
+ 15e:	21 e0       	ldi	r18, 0x01	; 1
+ 160:	30 e0       	ldi	r19, 0x00	; 0
+ 162:	08 2e       	mov	r0, r24
+ 164:	02 c0       	rjmp	.+4      	; 0x16a <DIO_u8Init_PIN+0xc0>
+ 166:	22 0f       	add	r18, r18
+ 168:	33 1f       	adc	r19, r19
+ 16a:	0a 94       	dec	r0
+ 16c:	e2 f7       	brpl	.-8      	; 0x166 <DIO_u8Init_PIN+0xbc>
+ 16e:	20 95       	com	r18
+ 170:	24 23       	and	r18, r20
+ 172:	70 e0       	ldi	r23, 0x00	; 0
+ 174:	02 c0       	rjmp	.+4      	; 0x17a <DIO_u8Init_PIN+0xd0>
+ 176:	66 0f       	add	r22, r22
+ 178:	77 1f       	adc	r23, r23
+ 17a:	8a 95       	dec	r24
+ 17c:	e2 f7       	brpl	.-8      	; 0x176 <DIO_u8Init_PIN+0xcc>
+ 17e:	62 2b       	or	r22, r18
+ 180:	61 bb       	out	0x11, r22	; 17
+ * Input     :Copy_u8PinNB (PIN Number) ,  Copy_u8Dir (PIN Direction)
+ * Output    : Return Error Status (Error or NO Error)
+ * */
+extern uint8_t DIO_u8Init_PIN(uint8_t Copy_u8PinN,uint8_t Copy_u8Dir)
+{
+	uint8_t Local_u8Error=NO_ERROR;              /*Local Error State*/
+ 182:	80 e0       	ldi	r24, 0x00	; 0
+ 184:	08 95       	ret
+
+	if(Copy_u8PinN > MAX_PIN_NO)     /*Check if Entered PIN NO. is more Than 7*/
+	{
+		Local_u8Error=ERROR;            /*Return ERROR*/
+ 186:	81 e0       	ldi	r24, 0x01	; 1
+ 188:	08 95       	ret
+	}
+	else if(Copy_u8Dir != DIO_INPUT && Copy_u8Dir != DIO_OUTPUT) /*Check if entered PIN Direction is not INPUT or OUTPUT*/
+	{
+		Local_u8Error=ERROR;           /*Return ERROR*/
+ 18a:	81 e0       	ldi	r24, 0x01	; 1
+ 18c:	08 95       	ret
+				ASSIGN_BIT(DIRECTION_PORT3,(Copy_u8PinN-(3*PIN_PER_PORT)),Copy_u8Dir);      /*ASSIGN PIN NO to entered Direction*/
+		}
+		else
+		{
+			/*Other Case Wrong PORT NO*/
+				Local_u8Error=ERROR;                         /*Error Flag*/
+ 18e:	81 e0       	ldi	r24, 0x01	; 1
+		}			
+
+	}
+
+	return Local_u8Error;  /*if ERROR exist it return 1 if NO ERROR return 0*/
+}
+ 190:	08 95       	ret
+
+00000192 <__vector_12>:
+/*- GLOBAL EXTERN VARIABLES -------------------------------*/
+/*- LOCAL FUNCTIONS IMPLEMENTATION ------------------------*/
+/* Interrupt Excution */
+void __vector_12(void)
+{
+	Gu8_ISR_Flag=1;
+ 192:	81 e0       	ldi	r24, 0x01	; 1
+ 194:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <Gu8_ISR_Flag>
+ 198:	08 95       	ret
+
+0000019a <SPI_Init>:
+/*- APIs IMPLEMENTATION -----------------------------------*/
+/* Description : SPI Initialization                                              */
+/* Input       : Str_SPIConfiguration_t* "Pointer to Struct of SPI Configration" */
+/* Output      : Error Code		                                                 */
+SPI_Error_t SPI_Init (Str_SpiCfg_t * Pstr_Config)
+{
+ 19a:	cf 93       	push	r28
+ 19c:	df 93       	push	r29
+	SPI_Error_t U16_Status = SPI_ERROR_INIT_OK;		/*Initialize Error Code*/
+	if(NULL_POINTER != Pstr_Config)			/*Check If the pinter passed is Null*/
+ 19e:	00 97       	sbiw	r24, 0x00	; 0
+ 1a0:	09 f4       	brne	.+2      	; 0x1a4 <SPI_Init+0xa>
+ 1a2:	9f c0       	rjmp	.+318    	; 0x2e2 <SPI_Init+0x148>
+	{
+		/*Checking the Interrupt Mode and assigning it or changing error status*/
+		if ((uint8_t)INTERRUPT == Pstr_Config->Interrupt_Mode)  /*Check for Interrupt Mode*/
+ 1a4:	fc 01       	movw	r30, r24
+ 1a6:	22 81       	ldd	r18, Z+2	; 0x02
+ 1a8:	21 30       	cpi	r18, 0x01	; 1
+ 1aa:	39 f4       	brne	.+14     	; 0x1ba <SPI_Init+0x20>
+		{
+			Gu8_Interrupt_Mode=INTERRUPT;
+ 1ac:	20 93 61 00 	sts	0x0061, r18	; 0x800061 <Gu8_Interrupt_Mode>
+			SETBIT(SREG,GLOBAL_INTERRUPT);
+ 1b0:	2f b7       	in	r18, 0x3f	; 63
+ 1b2:	20 68       	ori	r18, 0x80	; 128
+ 1b4:	2f bf       	out	0x3f, r18	; 63
+			SETBIT(SPCR,SPIE);
+ 1b6:	6f 9a       	sbi	0x0d, 7	; 13
+ 1b8:	6b c0       	rjmp	.+214    	; 0x290 <SPI_Init+0xf6>
+		}
+		else
+		{
+			if ((uint8_t)POLLING == Pstr_Config->Interrupt_Mode)
+ 1ba:	21 11       	cpse	r18, r1
+ 1bc:	58 c0       	rjmp	.+176    	; 0x26e <SPI_Init+0xd4>
+			{
+				Gu8_Interrupt_Mode=POLLING;
+ 1be:	10 92 61 00 	sts	0x0061, r1	; 0x800061 <Gu8_Interrupt_Mode>
+				CLEARBIT(SPCR,SPIE);
+ 1c2:	6f 98       	cbi	0x0d, 7	; 13
+ 1c4:	65 c0       	rjmp	.+202    	; 0x290 <SPI_Init+0xf6>
+ 1c6:	ec 01       	movw	r28, r24
+		if (SPI_ERROR_INIT_OK == U16_Status)
+		{
+			/*Checking the Order if least significant bit first and assigning registers it or changing error status*/
+			if((uint8_t)LEASTFIRST == Pstr_Config->Order)
+			{
+				SETBIT(SPCR,DORD);
+ 1c8:	6d 9a       	sbi	0x0d, 5	; 13
+			}
+			/*Checking for Error status*/
+			if ((uint16_t)SPI_ERROR_INIT_OK == U16_Status)
+			{
+				/*Checking the Master Mode, assigning registers and Initalize GPIO Pins or changing error status*/
+				if((uint8_t)MASTER == Pstr_Config->Master_Mode)
+ 1ca:	8b 81       	ldd	r24, Y+3	; 0x03
+ 1cc:	81 11       	cpse	r24, r1
+ 1ce:	26 c0       	rjmp	.+76     	; 0x21c <SPI_Init+0x82>
+				{
+					SETBIT(SPCR,MSTR);
+ 1d0:	6c 9a       	sbi	0x0d, 4	; 13
+					DIO_u8Init_PIN(SS,DIO_OUTPUT);
+ 1d2:	61 e0       	ldi	r22, 0x01	; 1
+ 1d4:	8c e0       	ldi	r24, 0x0C	; 12
+ 1d6:	0e 94 55 00 	call	0xaa	; 0xaa <DIO_u8Init_PIN>
+					DIO_u8Init_PIN(MOSI,DIO_OUTPUT);
+ 1da:	61 e0       	ldi	r22, 0x01	; 1
+ 1dc:	8d e0       	ldi	r24, 0x0D	; 13
+ 1de:	0e 94 55 00 	call	0xaa	; 0xaa <DIO_u8Init_PIN>
+					DIO_u8Init_PIN(MISO,DIO_INPUT);
+ 1e2:	60 e0       	ldi	r22, 0x00	; 0
+ 1e4:	8e e0       	ldi	r24, 0x0E	; 14
+ 1e6:	0e 94 55 00 	call	0xaa	; 0xaa <DIO_u8Init_PIN>
+					DIO_u8Init_PIN(SCK,DIO_OUTPUT);
+ 1ea:	61 e0       	ldi	r22, 0x01	; 1
+ 1ec:	8f e0       	ldi	r24, 0x0F	; 15
+ 1ee:	0e 94 55 00 	call	0xaa	; 0xaa <DIO_u8Init_PIN>
+					if ((uint8_t)SINGLE_SPEED == Pstr_Config->Speed_Mode)
+ 1f2:	89 81       	ldd	r24, Y+1	; 0x01
+ 1f4:	81 11       	cpse	r24, r1
+ 1f6:	02 c0       	rjmp	.+4      	; 0x1fc <SPI_Init+0x62>
+					{
+						CLEARBIT(SPSR,SPI2X);
+ 1f8:	70 98       	cbi	0x0e, 0	; 14
+ 1fa:	52 c0       	rjmp	.+164    	; 0x2a0 <SPI_Init+0x106>
+					}
+					else
+					{
+						/*Checking the Speed Mode entered and assigning it or changing error status*/
+						if ((uint8_t)DOUBLE_SPEED == Pstr_Config->Speed_Mode)
+ 1fc:	81 30       	cpi	r24, 0x01	; 1
+ 1fe:	d1 f5       	brne	.+116    	; 0x274 <SPI_Init+0xda>
+						{
+							SETBIT(SPSR,SPI2X);
+ 200:	70 9a       	sbi	0x0e, 0	; 14
+ 202:	4e c0       	rjmp	.+156    	; 0x2a0 <SPI_Init+0x106>
+						CLEARBIT(SPCR,SPR0);
+						CLEARBIT(SPCR,SPR1);
+						switch( Pstr_Config->Prescaller )
+						{
+							case PSC_4   :  
+							CLEARBIT(SPCR,SPR0);
+ 204:	68 98       	cbi	0x0d, 0	; 13
+							CLEARBIT(SPCR,SPR1);
+ 206:	69 98       	cbi	0x0d, 1	; 13
+							break;
+ 208:	65 c0       	rjmp	.+202    	; 0x2d4 <SPI_Init+0x13a>
+							case PSC_16  :  
+							SETBIT(SPCR,SPR0);
+ 20a:	68 9a       	sbi	0x0d, 0	; 13
+							CLEARBIT(SPCR,SPR1);
+ 20c:	69 98       	cbi	0x0d, 1	; 13
+							break;
+ 20e:	62 c0       	rjmp	.+196    	; 0x2d4 <SPI_Init+0x13a>
+							case PSC_64  :  
+							CLEARBIT(SPCR,SPR0);
+ 210:	68 98       	cbi	0x0d, 0	; 13
+							SETBIT(SPCR,SPR1);
+ 212:	69 9a       	sbi	0x0d, 1	; 13
+							break;
+ 214:	5f c0       	rjmp	.+190    	; 0x2d4 <SPI_Init+0x13a>
+							case PSC_128 :  
+							SETBIT(SPCR,SPR0);
+ 216:	68 9a       	sbi	0x0d, 0	; 13
+							SETBIT(SPCR,SPR1);
+ 218:	69 9a       	sbi	0x0d, 1	; 13
+							break;
+ 21a:	5c c0       	rjmp	.+184    	; 0x2d4 <SPI_Init+0x13a>
+					}
+				}
+				else
+				{
+					/*Checking the Slave Mode, assigning registers and Initalize GPIO Pins or changing error status*/
+					if((uint8_t)SLAVE == Pstr_Config->Master_Mode)
+ 21c:	81 30       	cpi	r24, 0x01	; 1
+ 21e:	09 f0       	breq	.+2      	; 0x222 <SPI_Init+0x88>
+ 220:	63 c0       	rjmp	.+198    	; 0x2e8 <SPI_Init+0x14e>
+					{
+						
+						
+						CLEARBIT(SPCR,MSTR);
+ 222:	6c 98       	cbi	0x0d, 4	; 13
+						DIO_u8Init_PIN(SS,DIO_INPUT);
+ 224:	60 e0       	ldi	r22, 0x00	; 0
+ 226:	8c e0       	ldi	r24, 0x0C	; 12
+ 228:	0e 94 55 00 	call	0xaa	; 0xaa <DIO_u8Init_PIN>
+						DIO_u8Init_PIN(MOSI,DIO_INPUT);
+ 22c:	60 e0       	ldi	r22, 0x00	; 0
+ 22e:	8d e0       	ldi	r24, 0x0D	; 13
+ 230:	0e 94 55 00 	call	0xaa	; 0xaa <DIO_u8Init_PIN>
+						DIO_u8Init_PIN(MISO,DIO_OUTPUT);
+ 234:	61 e0       	ldi	r22, 0x01	; 1
+ 236:	8e e0       	ldi	r24, 0x0E	; 14
+ 238:	0e 94 55 00 	call	0xaa	; 0xaa <DIO_u8Init_PIN>
+						DIO_u8Init_PIN(SCK,DIO_INPUT);
+ 23c:	60 e0       	ldi	r22, 0x00	; 0
+ 23e:	8f e0       	ldi	r24, 0x0F	; 15
+ 240:	0e 94 55 00 	call	0xaa	; 0xaa <DIO_u8Init_PIN>
+						/*Checking the Speed Mode entered and assigning it or changing error status*/
+						if ((uint8_t)SINGLE_SPEED == Pstr_Config->Speed_Mode)
+ 244:	89 81       	ldd	r24, Y+1	; 0x01
+ 246:	81 11       	cpse	r24, r1
+ 248:	02 c0       	rjmp	.+4      	; 0x24e <SPI_Init+0xb4>
+						{
+							CLEARBIT(SPSR,SPI2X);
+ 24a:	70 98       	cbi	0x0e, 0	; 14
+ 24c:	38 c0       	rjmp	.+112    	; 0x2be <SPI_Init+0x124>
+						}
+						else
+						{
+							if ((uint8_t)DOUBLE_SPEED == Pstr_Config->Speed_Mode)
+ 24e:	81 30       	cpi	r24, 0x01	; 1
+ 250:	a1 f4       	brne	.+40     	; 0x27a <SPI_Init+0xe0>
+							{
+								SETBIT(SPSR,SPI2X);
+ 252:	70 9a       	sbi	0x0e, 0	; 14
+ 254:	34 c0       	rjmp	.+104    	; 0x2be <SPI_Init+0x124>
+							CLEARBIT(SPCR,SPR0);
+							CLEARBIT(SPCR,SPR1);
+							switch( Pstr_Config->Prescaller )
+							{
+								case PSC_4   :
+								CLEARBIT(SPCR,SPR0);
+ 256:	68 98       	cbi	0x0d, 0	; 13
+								CLEARBIT(SPCR,SPR1);
+ 258:	69 98       	cbi	0x0d, 1	; 13
+								break;
+ 25a:	3c c0       	rjmp	.+120    	; 0x2d4 <SPI_Init+0x13a>
+								case PSC_16  :
+								SETBIT(SPCR,SPR0);
+ 25c:	68 9a       	sbi	0x0d, 0	; 13
+								CLEARBIT(SPCR,SPR1);
+ 25e:	69 98       	cbi	0x0d, 1	; 13
+								break;
+ 260:	39 c0       	rjmp	.+114    	; 0x2d4 <SPI_Init+0x13a>
+								case PSC_64  :
+								CLEARBIT(SPCR,SPR0);
+ 262:	68 98       	cbi	0x0d, 0	; 13
+								SETBIT(SPCR,SPR1);
+ 264:	69 9a       	sbi	0x0d, 1	; 13
+								break;
+ 266:	36 c0       	rjmp	.+108    	; 0x2d4 <SPI_Init+0x13a>
+								case PSC_128 :
+								SETBIT(SPCR,SPR0);
+ 268:	68 9a       	sbi	0x0d, 0	; 13
+								SETBIT(SPCR,SPR1);
+ 26a:	69 9a       	sbi	0x0d, 1	; 13
+								break;
+ 26c:	33 c0       	rjmp	.+102    	; 0x2d4 <SPI_Init+0x13a>
+				Gu8_Interrupt_Mode=POLLING;
+				CLEARBIT(SPCR,SPIE);
+			}
+			else
+			{
+				U16_Status = SPI_ERROR_INIT_INTERRUPT;
+ 26e:	80 e9       	ldi	r24, 0x90	; 144
+ 270:	93 e0       	ldi	r25, 0x03	; 3
+ 272:	0b c0       	rjmp	.+22     	; 0x28a <SPI_Init+0xf0>
+						{
+							SETBIT(SPSR,SPI2X);
+						}
+						else
+						{
+							U16_Status = SPI_ERROR_INIT_SPEED;
+ 274:	84 e9       	ldi	r24, 0x94	; 148
+ 276:	93 e0       	ldi	r25, 0x03	; 3
+ 278:	08 c0       	rjmp	.+16     	; 0x28a <SPI_Init+0xf0>
+							{
+								SETBIT(SPSR,SPI2X);
+							}
+							else
+							{
+								U16_Status = SPI_ERROR_INIT_SPEED;
+ 27a:	84 e9       	ldi	r24, 0x94	; 148
+ 27c:	93 e0       	ldi	r25, 0x03	; 3
+ 27e:	05 c0       	rjmp	.+10     	; 0x28a <SPI_Init+0xf0>
+							break;
+							case PSC_128 :  
+							SETBIT(SPCR,SPR0);
+							SETBIT(SPCR,SPR1);
+							break;
+							default: U16_Status = SPI_ERROR_INIT_PRESCALLER;
+ 280:	85 e9       	ldi	r24, 0x95	; 149
+ 282:	93 e0       	ldi	r25, 0x03	; 3
+ 284:	02 c0       	rjmp	.+4      	; 0x28a <SPI_Init+0xf0>
+								break;
+								case PSC_128 :
+								SETBIT(SPCR,SPR0);
+								SETBIT(SPCR,SPR1);
+								break;
+								default: U16_Status = SPI_ERROR_INIT_PRESCALLER;
+ 286:	85 e9       	ldi	r24, 0x95	; 149
+ 288:	93 e0       	ldi	r25, 0x03	; 3
+		Gu8_Init_Flag = INITIATED;
+		SETBIT(SPCR,SPE); /*Enable SPI*/
+	}
+	else
+	{
+		Gu8_Init_Flag = NOTINITIATED;
+ 28a:	10 92 60 00 	sts	0x0060, r1	; 0x800060 <_edata>
+ 28e:	2f c0       	rjmp	.+94     	; 0x2ee <SPI_Init+0x154>
+		}
+		/* Check If Error status Ok to continue*/
+		if (SPI_ERROR_INIT_OK == U16_Status)
+		{
+			/*Checking the Order if least significant bit first and assigning registers it or changing error status*/
+			if((uint8_t)LEASTFIRST == Pstr_Config->Order)
+ 290:	fc 01       	movw	r30, r24
+ 292:	24 81       	ldd	r18, Z+4	; 0x04
+ 294:	22 23       	and	r18, r18
+ 296:	09 f4       	brne	.+2      	; 0x29a <SPI_Init+0x100>
+ 298:	96 cf       	rjmp	.-212    	; 0x1c6 <SPI_Init+0x2c>
+				{
+					CLEARBIT(SPCR,DORD);	
+				}
+				else
+				{
+					U16_Status = SPI_ERROR_INIT_Order;
+ 29a:	81 e9       	ldi	r24, 0x91	; 145
+ 29c:	93 e0       	ldi	r25, 0x03	; 3
+ 29e:	f5 cf       	rjmp	.-22     	; 0x28a <SPI_Init+0xf0>
+						}
+					}
+					/*Checking the error status and the prescaller and assigning registers or changing error status*/
+					if((uint16_t)SPI_ERROR_INIT_OK == U16_Status)
+					{
+						CLEARBIT(SPCR,SPR0);
+ 2a0:	68 98       	cbi	0x0d, 0	; 13
+						CLEARBIT(SPCR,SPR1);
+ 2a2:	69 98       	cbi	0x0d, 1	; 13
+						switch( Pstr_Config->Prescaller )
+ 2a4:	88 81       	ld	r24, Y
+ 2a6:	81 30       	cpi	r24, 0x01	; 1
+ 2a8:	09 f4       	brne	.+2      	; 0x2ac <SPI_Init+0x112>
+ 2aa:	af cf       	rjmp	.-162    	; 0x20a <SPI_Init+0x70>
+ 2ac:	08 f4       	brcc	.+2      	; 0x2b0 <SPI_Init+0x116>
+ 2ae:	aa cf       	rjmp	.-172    	; 0x204 <SPI_Init+0x6a>
+ 2b0:	82 30       	cpi	r24, 0x02	; 2
+ 2b2:	09 f4       	brne	.+2      	; 0x2b6 <SPI_Init+0x11c>
+ 2b4:	ad cf       	rjmp	.-166    	; 0x210 <SPI_Init+0x76>
+ 2b6:	83 30       	cpi	r24, 0x03	; 3
+ 2b8:	09 f4       	brne	.+2      	; 0x2bc <SPI_Init+0x122>
+ 2ba:	ad cf       	rjmp	.-166    	; 0x216 <SPI_Init+0x7c>
+ 2bc:	e1 cf       	rjmp	.-62     	; 0x280 <SPI_Init+0xe6>
+							}
+						}
+						/*Checking the error status and the prescaller and assigning registers or changing error status*/
+						if((uint16_t)SPI_ERROR_INIT_OK == U16_Status)
+						{
+							CLEARBIT(SPCR,SPR0);
+ 2be:	68 98       	cbi	0x0d, 0	; 13
+							CLEARBIT(SPCR,SPR1);
+ 2c0:	69 98       	cbi	0x0d, 1	; 13
+							switch( Pstr_Config->Prescaller )
+ 2c2:	88 81       	ld	r24, Y
+ 2c4:	81 30       	cpi	r24, 0x01	; 1
+ 2c6:	51 f2       	breq	.-108    	; 0x25c <SPI_Init+0xc2>
+ 2c8:	30 f2       	brcs	.-116    	; 0x256 <SPI_Init+0xbc>
+ 2ca:	82 30       	cpi	r24, 0x02	; 2
+ 2cc:	51 f2       	breq	.-108    	; 0x262 <SPI_Init+0xc8>
+ 2ce:	83 30       	cpi	r24, 0x03	; 3
+ 2d0:	59 f2       	breq	.-106    	; 0x268 <SPI_Init+0xce>
+ 2d2:	d9 cf       	rjmp	.-78     	; 0x286 <SPI_Init+0xec>
+	{
+		U16_Status = SPI_ERROR_INIT_NULLPOINTER;
+	}
+	if ((uint16_t)SPI_ERROR_INIT_OK == U16_Status)
+	{
+		Gu8_Init_Flag = INITIATED;
+ 2d4:	81 e0       	ldi	r24, 0x01	; 1
+ 2d6:	80 93 60 00 	sts	0x0060, r24	; 0x800060 <_edata>
+		SETBIT(SPCR,SPE); /*Enable SPI*/
+ 2da:	6e 9a       	sbi	0x0d, 6	; 13
+ 2dc:	8e e8       	ldi	r24, 0x8E	; 142
+ 2de:	93 e0       	ldi	r25, 0x03	; 3
+	}
+	else
+	{
+		Gu8_Init_Flag = NOTINITIATED;
+	}
+	return U16_Status;
+ 2e0:	06 c0       	rjmp	.+12     	; 0x2ee <SPI_Init+0x154>
+			}
+		}
+	}
+	else
+	{
+		U16_Status = SPI_ERROR_INIT_NULLPOINTER;
+ 2e2:	8f e8       	ldi	r24, 0x8F	; 143
+ 2e4:	93 e0       	ldi	r25, 0x03	; 3
+ 2e6:	d1 cf       	rjmp	.-94     	; 0x28a <SPI_Init+0xf0>
+							/*Do Nothing*/
+						}
+					}
+					else
+					{
+						U16_Status = SPI_ERROR_INIT_MASTERMODE;
+ 2e8:	82 e9       	ldi	r24, 0x92	; 146
+ 2ea:	93 e0       	ldi	r25, 0x03	; 3
+ 2ec:	ce cf       	rjmp	.-100    	; 0x28a <SPI_Init+0xf0>
+	else
+	{
+		Gu8_Init_Flag = NOTINITIATED;
+	}
+	return U16_Status;
+}
+ 2ee:	df 91       	pop	r29
+ 2f0:	cf 91       	pop	r28
+ 2f2:	08 95       	ret
+
+000002f4 <SPI_Sendbyte>:
+
+SPI_Error_t SPI_Sendbyte(const uint8_t Data)
+{
+		SPI_Error_t U16_Status = SPI_ERROR_RECEIVEBYTE_OK;
+		if((uint8_t)INITIATED == Gu8_Init_Flag)
+ 2f4:	90 91 60 00 	lds	r25, 0x0060	; 0x800060 <_edata>
+ 2f8:	91 30       	cpi	r25, 0x01	; 1
+ 2fa:	81 f4       	brne	.+32     	; 0x31c <SPI_Sendbyte+0x28>
+		{
+			if (POLLING ==Gu8_Interrupt_Mode)
+ 2fc:	90 91 61 00 	lds	r25, 0x0061	; 0x800061 <Gu8_Interrupt_Mode>
+ 300:	91 11       	cpse	r25, r1
+ 302:	06 c0       	rjmp	.+12     	; 0x310 <SPI_Sendbyte+0x1c>
+			{
+				SPDR = Data;
+ 304:	8f b9       	out	0x0f, r24	; 15
+				while (IS_BIT_CLEARED(SPSR,SPIF));
+ 306:	77 9b       	sbis	0x0e, 7	; 14
+ 308:	fe cf       	rjmp	.-4      	; 0x306 <SPI_Sendbyte+0x12>
+	return U16_Status;
+}
+
+SPI_Error_t SPI_Sendbyte(const uint8_t Data)
+{
+		SPI_Error_t U16_Status = SPI_ERROR_RECEIVEBYTE_OK;
+ 30a:	82 ea       	ldi	r24, 0xA2	; 162
+ 30c:	93 e0       	ldi	r25, 0x03	; 3
+ 30e:	08 95       	ret
+				while (IS_BIT_CLEARED(SPSR,SPIF));
+				
+			}
+			else
+			{
+				Gu8_ISR_Flag=0;
+ 310:	10 92 62 00 	sts	0x0062, r1	; 0x800062 <Gu8_ISR_Flag>
+				SPDR=Data;
+ 314:	8f b9       	out	0x0f, r24	; 15
+	return U16_Status;
+}
+
+SPI_Error_t SPI_Sendbyte(const uint8_t Data)
+{
+		SPI_Error_t U16_Status = SPI_ERROR_RECEIVEBYTE_OK;
+ 316:	82 ea       	ldi	r24, 0xA2	; 162
+ 318:	93 e0       	ldi	r25, 0x03	; 3
+ 31a:	08 95       	ret
+				SPDR=Data;
+			}
+		}
+		else
+		{
+			U16_Status= SPI_ERROR_SENDBYTE_NOTINIT;
+ 31c:	89 e9       	ldi	r24, 0x99	; 153
+ 31e:	93 e0       	ldi	r25, 0x03	; 3
+		}
+		return U16_Status;
+}
+ 320:	08 95       	ret
+
+00000322 <_exit>:
+ 322:	f8 94       	cli
+
+00000324 <__stop_program>:
+ 324:	ff cf       	rjmp	.-2      	; 0x324 <__stop_program>
